@@ -9,7 +9,6 @@ enum Message {
     Echo,
     Move,
     ChangeColor,
-,
 }
 
 fn main() {
