@@ -6,12 +6,20 @@
 // Execute `rustlings hint tests2` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+#[derive(Debug, PartialEq)]
+struct WBB;
 
 #[cfg(test)]
 mod tests {
+    // module
+    use super::*;
     #[test]
     fn you_can_assert_eq() {
-        assert_eq!();
+        // asset_eq arg1 arg2 the same type: Debug + PartialEq // trait
+        // i32
+        let a = WBB;
+
+        let b = WBB;
+        assert_eq!(a, b);
     }
 }
