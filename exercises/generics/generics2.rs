@@ -22,11 +22,13 @@ mod tests {
 
     #[test]
     fn store_u32_in_wrapper() {
+        // i32
         assert_eq!(Wrapper::new(42).value, 42);
     }
 
     #[test]
     fn store_str_in_wrapper() {
+        // &str
         assert_eq!(Wrapper::new("Foo").value, "Foo");
     }
 }
