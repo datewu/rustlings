@@ -12,16 +12,22 @@
 //
 // Execute `rustlings hint cow1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+// Borrow checking system doesn't allow mutable & imutable refernce
+// Cow smart pointer,no runtime panic but clone -> mutation
+// Bypass borrow checking, Cow mutation -> auto clone
 
 use std::borrow::Cow;
 
+// i32 slice abs each item
 fn abs_all<'a, 'b>(input: &'a mut Cow<'b, [i32]>) -> &'a mut Cow<'b, [i32]> {
     for i in 0..input.len() {
         let v = input[i];
         if v < 0 {
+            // mutable reference -> auto Clone
             // Clones into a vector if not already owned.
             input.to_mut()[i] = -v;
+        } else {
+            // imutabe reference
         }
     }
     input
@@ -37,7 +43,7 @@ mod tests {
         let slice = [-1, 0, 1];
         let mut input = Cow::from(&slice[..]);
         match abs_all(&mut input) {
-            Cow::Owned(_) => Ok(()),
+            Cow::Owned(_) => Ok(()), // Clone
             _ => Err("Expected owned value"),
         }
     }
@@ -45,10 +51,11 @@ mod tests {
     #[test]
     fn reference_no_mutation() -> Result<(), &'static str> {
         // No clone occurs because `input` doesn't need to be mutated.
-        let slice = [0, 1, 2];
-        let mut input = Cow::from(&slice[..]);
+        let slice = [0, 1, 2]; // imutabe reference
+        let mut input = Cow::from(&slice[..]); // reference
         match abs_all(&mut input) {
-            // TODO
+            Cow::Borrowed(_) => Ok(()),
+            _ => Err("imutable borrowed only"),
         }
     }
 
@@ -57,10 +64,11 @@ mod tests {
         // We can also pass `slice` without `&` so Cow owns it directly. In this
         // case no mutation occurs and thus also no clone, but the result is
         // still owned because it was never borrowed or mutated.
-        let slice = vec![0, 1, 2];
-        let mut input = Cow::from(slice);
+        let slice = vec![0, 1, 2]; // mutale
+        let mut input = Cow::from(slice); // owned
         match abs_all(&mut input) {
-            // TODO
+            Cow::Owned(_) => Ok(()), // Clone
+            _ => Err("Expected owned value"),
         }
     }
 
@@ -73,6 +81,8 @@ mod tests {
         let mut input = Cow::from(slice);
         match abs_all(&mut input) {
             // TODO
+            Cow::Owned(_) => Ok(()), // Clone
+            _ => Err("Expected owned value"),
         }
     }
 }
