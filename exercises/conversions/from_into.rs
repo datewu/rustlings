@@ -32,7 +32,7 @@ impl Default for Person {
 // Steps:
 // 1. If the length of the provided string is 0, then return the default of
 //    Person.
-// 2. Split the given string on the commas present in it.
+// 2. Split the given string on the commas present in it. like  a csv file
 // 3. Extract the first element from the split operation and use it as the name.
 // 4. If the name is empty, then return the default of Person.
 // 5. Extract the other element from the split operation and parse it into a
@@ -40,10 +40,31 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.is_empty() {
+            return Self::default();
+        }
+        let mut data = s.split(",");
+        if let Some(name) = data.next() {
+            if name.is_empty() {
+                return Self::default();
+            }
+            if let Some(age) = data.next() {
+                let age = age.parse::<usize>(); // Result mathc
+                if age.is_err() {
+                    // is_err() ;; match
+                    return Self::default();
+                }
+                return Self {
+                    name: name.to_string(),
+                    age: age.unwrap(),
+                };
+            }
+        } else {
+            return Self::default();
+        }
+        Self::default()
     }
 }
 
@@ -91,7 +112,7 @@ mod tests {
 
     #[test]
     fn test_missing_comma_and_age() {
-        let p: Person = Person::from("Mark");
+        let p: Person = Person::from("Mark"); // "Mark, 18"
         assert_eq!(p.name, "John");
         assert_eq!(p.age, 30);
     }
