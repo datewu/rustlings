@@ -152,6 +152,7 @@ struct Color {
 // Display trait for Color
 impl fmt::Display for Color {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // pattern match
         let Color { red, green, blue } = self;
         let red = *red as i32;
         let blue = *blue as i32;
